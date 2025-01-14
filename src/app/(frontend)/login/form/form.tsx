@@ -60,6 +60,7 @@ export function LoginForm() {
                     <Input
                       className={errors.password ? "border-red-400" : touchedFields.password ? "border-green-600" : ""}
                       type="password"
+                      placeholder="password..."
                       {...field}
                     />
                   </FormControl>
