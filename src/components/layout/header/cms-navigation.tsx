@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { cms } from "@/cms-facade";
+import Link from "next/link";
 
-const CmsNavigation = async () => {
+export const CmsNavigation = async () => {
   const cmsNavigation = await cms.navigation.rootNavigation();
 
-  return cmsNavigation.map((n, i) => {
+  return cmsNavigation?.map((n, i) => {
     return (
       <Link key={i} prefetch={false} href={n.link} className="hover:underline">
         {n.name}
@@ -12,5 +12,3 @@ const CmsNavigation = async () => {
     );
   });
 };
-
-export default CmsNavigation;

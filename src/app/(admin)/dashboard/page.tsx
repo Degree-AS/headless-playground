@@ -1,7 +1,6 @@
-import OrdersChart from "./_components/orders-chart/orders-chart";
-import TrafficChart from "./_components/traffic-chart/traffic-chart";
+import { OrdersChart, TrafficChart } from "@/components/features";
 
-export default async function About() {
+export default function Dashboard() {
   return (
     <div className="flex flex-row">
       <main className="flex flex-col flex-[2] space-y-12">

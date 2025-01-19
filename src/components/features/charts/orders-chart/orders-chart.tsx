@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
-import LoadingIndicator from "@/components/loading-indicator/loading-indicator";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import OrdersChartServer from "./orders-chart.server";
 
-const OrdersChart = async () => {
+export const OrdersChart = async () => {
   return (
     <Card>
       <CardHeader>ORDERS BY DAY</CardHeader>
@@ -16,5 +16,3 @@ const OrdersChart = async () => {
     </Card>
   );
 };
-
-export default OrdersChart;

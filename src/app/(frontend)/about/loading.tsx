@@ -1,4 +1,4 @@
-import LoadingIndicator from "@/components/loading-indicator/loading-indicator";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 
 export default function Loading() {
   return <LoadingIndicator />;

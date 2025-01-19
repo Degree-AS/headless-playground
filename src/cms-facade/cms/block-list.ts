@@ -8,8 +8,7 @@ export type BlockItem = {
   props?: BlockProperty[];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const blockList = (pageId: string) => {
+const blockList = () => {
   return [
     {
       type: "hero",
@@ -20,7 +19,8 @@ const blockList = (pageId: string) => {
         },
         {
           name: "imageUrl",
-          value: "https://fastly.picsum.photos/id/26/4209/2769.jpg?hmac=vcInmowFvPCyKGtV7Vfh7zWcA_Z0kStrPDW3ppP0iGI",
+          value:
+            "https://fastly.picsum.photos/id/26/4209/2769.jpg?hmac=vcInmowFvPCyKGtV7Vfh7zWcA_Z0kStrPDW3ppP0iGI",
         },
       ],
     } as BlockItem,

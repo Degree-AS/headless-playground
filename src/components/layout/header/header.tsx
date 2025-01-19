@@ -1,31 +1,46 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { Suspense } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
-import CmsNavigation from "./cms-navigation";
-import Link from "next/link";
-import LoadingIndicator from "@/components/loading-indicator/loading-indicator";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart } from "lucide-react";
 import { ThemeSelector } from "@/components/ui/theme-selector";
+import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
+import { CmsNavigation } from "./cms-navigation";
 
-const Header = async () => {
+export const Header = () => {
   return (
     <header className="bg-stone-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link prefetch={false} href="/">
-          <img src="./logo.webp" alt="Company logo" className="max-w-24" />
+          <Image
+            src="/logo.webp"
+            alt="Company logo"
+            className="max-w-24"
+            width={200}
+            height={50}
+          />
         </Link>
         <nav className="flex items-center h-5 space-x-4">
-          {/* cms navigation */}
-          <Suspense fallback={<LoadingIndicator backdrop={false} size="16px" />}>
+          <Suspense
+            fallback={<LoadingIndicator backdrop={false} size="16px" />}
+          >
             <CmsNavigation />
           </Suspense>
-
-          <Separator orientation="vertical" decorative className="bg-gray-500" />
+          <Separator
+            orientation="vertical"
+            decorative
+            className="bg-gray-500"
+          />
 
           {/* static navigation */}
           <Link prefetch={false} href="/" className="hover:underline">
@@ -71,5 +86,3 @@ const Header = async () => {
     </header>
   );
 };
-
-export default Header;

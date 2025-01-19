@@ -1,15 +1,22 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { onSubmit, schema } from "./form.handler";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof schema>>({
@@ -28,7 +35,7 @@ export function LoginForm() {
   return (
     <Card className="mx-auto w-1/3">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Login with React Hook Form</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -41,7 +48,13 @@ export function LoginForm() {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
-                      className={errors.username ? "border-red-400" : touchedFields.username ? "border-green-600" : ""}
+                      className={
+                        errors.username
+                          ? "border-red-400"
+                          : touchedFields.username
+                          ? "border-green-600"
+                          : ""
+                      }
                       placeholder="username..."
                       {...field}
                     />
@@ -58,7 +71,13 @@ export function LoginForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      className={errors.password ? "border-red-400" : touchedFields.password ? "border-green-600" : ""}
+                      className={
+                        errors.password
+                          ? "border-red-400"
+                          : touchedFields.password
+                          ? "border-green-600"
+                          : ""
+                      }
                       type="password"
                       placeholder="password..."
                       {...field}

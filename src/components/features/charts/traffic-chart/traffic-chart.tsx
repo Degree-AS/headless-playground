@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import LoadingIndicator from "@/components/loading-indicator/loading-indicator";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import { Suspense } from "react";
 import TrafficChartServer from "./traffic-chart.server";
 
-const TrafficChart = async () => {
+export const TrafficChart = async () => {
   return (
     <Card>
       <CardHeader>TRAFFIC DATA</CardHeader>
@@ -16,5 +16,3 @@ const TrafficChart = async () => {
     </Card>
   );
 };
-
-export default TrafficChart;
