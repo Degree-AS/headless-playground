@@ -1,36 +1,33 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { onSubmit, schema } from "./form.handler";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { login } from "@/actions";
+import { schema } from "./login-form.schema";
+import { useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof schema>>({
     mode: "onBlur",
     resolver: zodResolver(schema),
     defaultValues: {
-      username: "",
-      password: "",
+      email: "demo@demo.com",
+      password: "demo",
     },
   });
 
   const {
-    formState: { errors, touchedFields, isValid, isSubmitting },
+    formState: { errors, touchedFields, isValid },
   } = form;
+
+  const [result, action, isPending] = useActionState(login, undefined);
 
   return (
     <Card className="mx-auto w-1/3">
@@ -39,23 +36,17 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form action={action} className="space-y-6">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      className={
-                        errors.username
-                          ? "border-red-400"
-                          : touchedFields.username
-                          ? "border-green-600"
-                          : ""
-                      }
-                      placeholder="username..."
+                      className={errors.email ? "border-red-400" : touchedFields.email ? "border-green-600" : ""}
+                      placeholder="email..."
                       {...field}
                     />
                   </FormControl>
@@ -71,13 +62,7 @@ export function LoginForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      className={
-                        errors.password
-                          ? "border-red-400"
-                          : touchedFields.password
-                          ? "border-green-600"
-                          : ""
-                      }
+                      className={errors.password ? "border-red-400" : touchedFields.password ? "border-green-600" : ""}
                       type="password"
                       placeholder="password..."
                       {...field}
@@ -87,9 +72,14 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
+            {result?.errors && (
+              <div className="p-4 rounded-md bg-red-950 text-white">
+                <p>{JSON.stringify(result.errors)}</p>
+              </div>
+            )}
             <div className="text-right">
-              <Button type="submit" disabled={!isValid || isSubmitting}>
-                {isSubmitting && <Loader2 className="animate-spin" />}
+              <Button type="submit" disabled={!isValid || isPending}>
+                {isPending && <Loader2 className="animate-spin" />}
                 Submit
               </Button>
             </div>
