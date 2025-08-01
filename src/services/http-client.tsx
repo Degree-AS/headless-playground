@@ -1,4 +1,4 @@
-import axios,  { AxiosInstance,  AxiosRequestConfig,  AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { env } from '@/config/env'
 
 class HttpClient {
@@ -30,8 +30,7 @@ class HttpClient {
       (response: AxiosResponse) => {
         return response
       },
-      (error) => {
-        console.error('API Error:', error.response?.data || error.message)
+      (error: AxiosError) => {
         return Promise.reject(error)
       },
     )
