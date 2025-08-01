@@ -1,10 +1,10 @@
-export interface NavigationNode {
+export type NavigationNode = {
   pageId: number
   name: string
   showInMenu: boolean
   nodes: NavigationNode[]
 }
 
-export interface NavigationResponse {
+export type NavigationResponse = {
   nodes: NavigationNode[]
 }

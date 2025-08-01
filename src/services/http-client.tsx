@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { env } from '@/config/env'
+import { ApiResponse } from './api.types'
 
 class HttpClient {
   private client: AxiosInstance
@@ -17,15 +18,6 @@ class HttpClient {
   }
 
   private setupInterceptors(): void {
-    this.client.interceptors.request.use(
-      (config) => {
-        return config
-      },
-      (error) => {
-        return Promise.reject(error)
-      },
-    )
-
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
         return response
@@ -36,32 +28,77 @@ class HttpClient {
     )
   }
 
-  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.get<T>(url, config)
-    return response.data
+  private onError<T>(error: unknown): ApiResponse<T> {
+    if (error && (error as AxiosError).isAxiosError) {
+      return {
+        data: undefined,
+        success: false,
+        error: (error as AxiosError).message,
+      }
+    }
+
+    return {
+      data: undefined,
+      success: false,
+      error: 'Unexpected http-client error occurred',
+    }
+  }
+
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.get<T>(url, config)
+      return {
+        data: response.data,
+        success: true,
+      }
+    } catch (error: unknown) {
+      return this.onError<T>(error)
+    }
   }
 
   async post<TRequest, TResponse>(
     url: string,
     data?: TRequest,
     config?: AxiosRequestConfig,
-  ): Promise<TResponse> {
-    const response = await this.client.post<TResponse>(url, data, config)
-    return response.data
+  ): Promise<ApiResponse<TResponse>> {
+    try {
+      const response = await this.client.post<TResponse>(url, data, config)
+      return {
+        data: response.data,
+        success: true,
+        error: undefined,
+      }
+    } catch (error: unknown) {
+      return this.onError<TResponse>(error)
+    }
   }
 
   async put<TRequest, TResponse>(
     url: string,
     data?: TRequest,
     config?: AxiosRequestConfig,
-  ): Promise<TResponse> {
-    const response = await this.client.put<TResponse>(url, data, config)
-    return response.data
+  ): Promise<ApiResponse<TResponse>> {
+    try {
+      const response = await this.client.put<TResponse>(url, data, config)
+      return {
+        data: response.data,
+        success: true,
+      }
+    } catch (error: unknown) {
+      return this.onError<TResponse>(error)
+    }
   }
 
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.delete<T>(url, config)
-    return response.data
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.delete<T>(url, config)
+      return {
+        data: response.data,
+        success: true,
+      }
+    } catch (error: unknown) {
+      return this.onError<T>(error)
+    }
   }
 }
 

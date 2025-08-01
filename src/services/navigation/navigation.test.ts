@@ -9,4 +9,11 @@ describe('Get Navigation', () => {
     expect(nodes).toBeDefined()
     expect(nodes.length).toBeGreaterThan(0)
   })
+
+  it('Should return failed response for 401 server response', async () => {
+    const nodes = await navigationService.getNavigations()
+
+    expect(nodes).toBeDefined()
+    expect(nodes.length).toBeGreaterThan(0)
+  })
 })

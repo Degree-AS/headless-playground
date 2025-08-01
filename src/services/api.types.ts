@@ -1,11 +1,7 @@
-export interface ApiError {
-  message: string
-  status?: number
-  code?: string
+export type ApiResponse<T> = {
+  data?: T
+  success: boolean
+  error?: string
 }
 
-export interface ApiResponse<T> {
-  data: T
-  success: boolean
-  error?: ApiError
-}
+export type ApiError = string

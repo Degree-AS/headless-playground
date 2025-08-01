@@ -1,20 +1,28 @@
 'use client'
-import { Card,  CardContent } from '@/components/ui'
+import { Card, CardContent } from '@/components/ui'
 /* eslint-disable @next/next/no-img-element */
 import { cn } from '@/lib/utils'
+import { userService } from '@/services'
 import { LoginFormData } from './form/auth.types'
 import { LoginForm } from './form/login-form'
+
+const onSubmit = async (data: LoginFormData): Promise<void> => {
+  const loginResponse = await userService.login({
+    request: {
+      email: data.email,
+      password: data.password,
+    },
+  })
+
+  console.log('Login response:', loginResponse)
+}
 
 export function LoginBlock({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <LoginForm
-            onSubmit={(data: LoginFormData): Promise<void> | void => {
-              console.log(data)
-            }}
-          />
+          <LoginForm onSubmit={onSubmit} />
 
           <div className="bg-muted relative hidden md:block">
             <img

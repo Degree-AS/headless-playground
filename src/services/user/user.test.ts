@@ -5,31 +5,34 @@ import { userService } from './user.service'
 describe('Login', () => {
   it('should retrieve authentication token for valid credentials', async () => {
     const response = await userService.login({
-      username: 'username',
+      email: 'username@email.com',
       password: 'password',
     })
 
-    expect(response).toBeDefined()
-    expect(response.token.length).toBeGreaterThan(0)
+    expect(response.success).toBeTruthy()
+    expect(response.error).toBeFalsy()
+    expect(response.data?.token.length).toBeGreaterThan(0)
   })
 
-  it('should return empty token for 403 server response', async () => {
+  it('should return failed response for 403 server response', async () => {
     const response = await userService.login({
-      username: '403',
+      email: '403@email.com',
       password: '',
     })
 
-    expect(response).toBeDefined()
-    expect(response.token.length).toBeFalsy()
+    expect(response?.data).toBeUndefined()
+    expect(response.success).toBeFalsy()
+    expect(response.error?.length).toBeGreaterThan(0)
   })
 
-  it('should return empty token for 404 server response', async () => {
+  it('should return failed response for 404 server response', async () => {
     const response = await userService.login({
-      username: '403',
+      email: '403@email.com',
       password: '',
     })
 
-    expect(response).toBeDefined()
-    expect(response.token.length).toBeFalsy()
+    expect(response?.data).toBeUndefined()
+    expect(response.success).toBeFalsy()
+    expect(response.error?.length).toBeGreaterThan(0)
   })
 })

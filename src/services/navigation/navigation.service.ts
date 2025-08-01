@@ -1,5 +1,5 @@
 import { httpClient } from '../http-client'
-import { NavigationNode,  NavigationResponse } from './navigation.types'
+import { NavigationNode, NavigationResponse } from './navigation.types'
 
 export class NavigationService {
   private static readonly ENDPOINTS = {
@@ -11,9 +11,9 @@ export class NavigationService {
       NavigationService.ENDPOINTS.GET_NAVIGATIONS,
     )
 
-    if (!response.nodes) return []
+    if (!response.data?.nodes) return []
 
-    return response.nodes.filter((node) => node.showInMenu)
+    return response.data?.nodes.filter((node) => node.showInMenu)
   }
 }
 

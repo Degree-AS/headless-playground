@@ -20,7 +20,6 @@ export function LoginForm({ onSubmit, loading = false, error, defaultValues }: L
     try {
       await onSubmit(data)
     } catch (error) {
-      // Error handling is done by parent component
       console.error('Login form submission error:', error)
     }
   }
