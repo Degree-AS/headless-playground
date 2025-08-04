@@ -1,32 +1,50 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, InputField, PasswordField } from '@/components/form-elements'
 import { Button } from '@/components/ui'
+import { userService } from '@/services'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoginFormData, LoginFormProps, loginSchema } from './auth.types'
+import { LoginFormData, loginSchema } from './auth.types'
 
-export function LoginForm({ onSubmit, loading = false, error, defaultValues }: LoginFormProps) {
+export function LoginForm() {
+  const [error, setError] = useState<string | null>(null)
+
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
     defaultValues: {
       email: '',
       password: '',
-      ...defaultValues,
     },
   })
 
-  const handleSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData): Promise<void> => {
+    setError(null)
+
     try {
-      await onSubmit(data)
-    } catch (error) {
-      console.error('Login form submission error:', error)
+      const result = await userService.login({
+        email: data.email,
+        password: data.password,
+      })
+
+      if (result.error) {
+        setError(result.error)
+      } else {
+        // Success case - reset form and handle successful login
+        form.reset()
+        alert('ok')
+        // TODO: Add navigation or success callback here
+      }
+    } catch {
+      setError('An unexpected error occurred')
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6 md:p-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -56,7 +74,12 @@ export function LoginForm({ onSubmit, loading = false, error, defaultValues }: L
             autoComplete="current-password"
           />
 
-          <Button type="submit" className="w-full" loading={loading} disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full"
+            loading={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting}
+          >
             Login
           </Button>
 

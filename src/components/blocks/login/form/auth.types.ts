@@ -10,11 +10,3 @@ export const loginSchema = z.object({
 })
 
 export type LoginFormData = z.infer<typeof loginSchema>
-
-export interface LoginFormProps {
-  onSubmit: (data: LoginFormData) => Promise<void> | void
-  loading?: boolean
-  error?: string | null
-  defaultValues?: Partial<LoginFormData>
-  className?: string
-}

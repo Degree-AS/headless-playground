@@ -3,12 +3,12 @@ import { NavigationNode, NavigationResponse } from './navigation.types'
 
 export class NavigationService {
   private static readonly ENDPOINTS = {
-    GET_NAVIGATIONS: '/dwapi/frontend/navigations/1',
+    GET_NAVIGATIONS: '/dwapi/frontend/navigations',
   }
 
-  async getNavigations(): Promise<NavigationNode[]> {
+  async getNavigations(id: number): Promise<NavigationNode[]> {
     const response = await httpClient.get<NavigationResponse>(
-      NavigationService.ENDPOINTS.GET_NAVIGATIONS,
+      `${NavigationService.ENDPOINTS.GET_NAVIGATIONS}/${id}`,
     )
 
     if (!response.data?.nodes) return []
