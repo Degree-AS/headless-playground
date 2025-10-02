@@ -1,11 +1,19 @@
-import { Menu } from 'lucide-react'
-import { Suspense } from 'react'
 import {
-    Accordion,  AccordionContent,  AccordionItem,  AccordionTrigger,  Button,  Sheet,  SheetContent,
-    SheetHeader,  SheetTitle,  SheetTrigger
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '@/components/ui'
 import { navigationService } from '@/services'
-import { AuthNodes,  StaticNodeItem } from '../header'
+import { Menu } from 'lucide-react'
+import { Suspense } from 'react'
+import { AuthNodes, StaticNodeItem } from '../header'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
 
@@ -50,7 +58,7 @@ const SubMenuLink = ({ node }: { node: StaticNodeItem }) => {
 }
 
 const MobileCmsNavigation = async () => {
-  const cmsNodes = await navigationService.getNavigations()
+  const cmsNodes = await navigationService.getNavigations(1)
 
   return (
     <>

@@ -3,6 +3,7 @@ import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { Toaster } from '@/components/ui/sonner/sonner'
 
 export const metadata: Metadata = {
   title: 'DynamicWeb Headless Playground',
@@ -28,6 +29,7 @@ export default function RootLayout({
             <div className="flex flex-1">{children}</div>
             <Footer />
           </div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

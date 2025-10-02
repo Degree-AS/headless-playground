@@ -1,10 +1,15 @@
-import { Suspense } from 'react'
 import {
-    Button,  NavigationMenu,  NavigationMenuContent,  NavigationMenuItem,  NavigationMenuLink,
-    NavigationMenuList,  NavigationMenuTrigger
+  Button,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from '@/components/ui'
 import { navigationService } from '@/services'
-import { AuthNodes,  StaticNodeItem } from '../header'
+import { Suspense } from 'react'
+import { AuthNodes, StaticNodeItem } from '../header'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
 
@@ -43,7 +48,7 @@ const SubMenuLink = ({ node }: { node: StaticNodeItem }) => {
 }
 
 const DesktopCmsNavigation = async () => {
-  const cmsNodes = await navigationService.getNavigations()
+  const cmsNodes = await navigationService.getNavigations(1)
 
   return (
     <NavigationMenu>

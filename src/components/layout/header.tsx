@@ -79,8 +79,8 @@ export interface AuthNodes {
 }
 
 const authNodes: AuthNodes = {
-  login: { title: 'Login', url: 'login' },
-  signup: { title: 'Sign up', url: '#' },
+  login: { title: 'Login', url: '/login' },
+  signup: { title: 'Sign up', url: '/register' },
 }
 
 const Header = () => {

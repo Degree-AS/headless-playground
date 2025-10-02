@@ -7,39 +7,51 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { LoginFormData, loginSchema } from './auth.types'
+import { RegisterFormData, registerSchema } from '../../login/form/auth.types'
+import { RegistrationSuccess } from '../registration-success'
 
-export function LoginForm() {
+export function RegisterForm() {
   const [error, setError] = useState<string | null>(null)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [registeredEmail, setRegisteredEmail] = useState('')
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     mode: 'onBlur',
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
+      firstName: '',
+      lastName: '',
     },
   })
 
-  const onSubmit = async (data: LoginFormData): Promise<void> => {
+  const onSubmit = async (data: RegisterFormData): Promise<void> => {
     setError(null)
 
     try {
-      const result = await userService.login({
+      const result = await userService.register({
         email: data.email,
         password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
       })
 
       if (result.error) {
         setError(result.error)
       } else {
         // Success case
-        form.reset()
-        setError(null)
+        setRegisteredEmail(data.email)
+        setIsSuccess(true)
       }
     } catch {
       setError('An unexpected error occurred')
     }
+  }
+
+  if (isSuccess) {
+    return <RegistrationSuccess email={registeredEmail} />
   }
 
   return (
@@ -47,8 +59,10 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center text-center">
-            <h1 className="text-2xl font-bold">Welcome back</h1>
-            <p className="text-muted-foreground text-balance">Login to your Degree account</p>
+            <h1 className="text-2xl font-bold">Create an account</h1>
+            <p className="text-muted-foreground text-balance">
+              Enter your details to create your account
+            </p>
           </div>
 
           {error && (
@@ -56,6 +70,26 @@ export function LoginForm() {
               {error}
             </div>
           )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <InputField
+              form={form}
+              name="firstName"
+              label="First Name"
+              type="text"
+              placeholder="Enter your first name"
+              autoComplete="given-name"
+            />
+
+            <InputField
+              form={form}
+              name="lastName"
+              label="Last Name"
+              type="text"
+              placeholder="Enter your last name"
+              autoComplete="family-name"
+            />
+          </div>
 
           <InputField
             form={form}
@@ -71,7 +105,15 @@ export function LoginForm() {
             name="password"
             label="Password"
             placeholder="Enter your password"
-            autoComplete="current-password"
+            autoComplete="new-password"
+          />
+
+          <PasswordField
+            form={form}
+            name="confirmPassword"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            autoComplete="new-password"
           />
 
           <Button
@@ -80,7 +122,7 @@ export function LoginForm() {
             loading={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting}
           >
-            Login
+            Create Account
           </Button>
 
           <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -96,7 +138,7 @@ export function LoginForm() {
                   fill="currentColor"
                 />
               </svg>
-              <span className="sr-only">Login with Apple</span>
+              <span className="sr-only">Sign up with Apple</span>
             </Button>
             <Button variant="outline" type="button" className="w-full">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -105,7 +147,7 @@ export function LoginForm() {
                   fill="currentColor"
                 />
               </svg>
-              <span className="sr-only">Login with Google</span>
+              <span className="sr-only">Sign up with Google</span>
             </Button>
             <Button variant="outline" type="button" className="w-full">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -114,13 +156,13 @@ export function LoginForm() {
                   fill="currentColor"
                 />
               </svg>
-              <span className="sr-only">Login with Meta</span>
+              <span className="sr-only">Sign up with Meta</span>
             </Button>
           </div>
           <div className="text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="underline underline-offset-4">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/login" className="underline underline-offset-4">
+              Sign in
             </Link>
           </div>
         </div>
