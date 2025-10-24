@@ -10,12 +10,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui'
-import { navigationService } from '@/services'
+import { type User } from '@/services'
 import { Menu } from 'lucide-react'
-import { Suspense } from 'react'
 import { AuthNodes, StaticNodeItem } from '../header'
+import { CmsNavigationMobileClient } from './cms-navigation-mobile-client'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
+import { UserMenuMobile } from './user-menu-mobile'
 
 const renderMobileMenuItem = (node: StaticNodeItem) => {
   if (node.nodes && node.nodes.length > 0) {
@@ -57,49 +58,15 @@ const SubMenuLink = ({ node }: { node: StaticNodeItem }) => {
   )
 }
 
-const MobileCmsNavigation = async () => {
-  const cmsNodes = await navigationService.getNavigations(1)
-
-  return (
-    <>
-      {cmsNodes.map((node) => {
-        if (node.nodes) {
-          return (
-            <AccordionItem key={node.name} value={node.name} className="border-b-0">
-              <AccordionTrigger className="text-md py-0 font-semibold hover:no-underline">
-                {node.name}
-              </AccordionTrigger>
-              <AccordionContent className="mt-2">
-                {node.nodes.map((subNode) => (
-                  <a
-                    key={subNode.name}
-                    className="hover:bg-muted hover:text-accent-foreground flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
-                    href={`cms/pageId=${subNode.pageId}`}
-                  >
-                    <div className="text-sm font-semibold">{subNode.name}</div>
-                  </a>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-          )
-        }
-
-        return (
-          <a key={node.name} href={`cms/pageId=${node.pageId}`} className="text-md font-semibold">
-            {node.name}
-          </a>
-        )
-      })}
-    </>
-  )
-}
 
 export const MobileNavigation = ({
   staticNodes,
   authNodes: auth,
+  user,
 }: {
   staticNodes: StaticNodeItem[]
   authNodes: AuthNodes
+  user: User | null
 }) => {
   return (
     <div className="block lg:hidden">
@@ -119,19 +86,23 @@ export const MobileNavigation = ({
             </SheetHeader>
             <div className="flex flex-col gap-12 p-4">
               <Accordion type="single" collapsible className="flex w-full flex-col gap-4">
-                <Suspense fallback={null}>
-                  <MobileCmsNavigation />
-                </Suspense>
+                <CmsNavigationMobileClient />
                 {staticNodes.map((item) => renderMobileMenuItem(item))}
               </Accordion>
 
               <div className="flex flex-col gap-3">
-                <Button asChild variant="outline">
-                  <a href={auth.login.url}>{auth.login.title}</a>
-                </Button>
-                <Button asChild>
-                  <a href={auth.signup.url}>{auth.signup.title}</a>
-                </Button>
+                {user ? (
+                  <UserMenuMobile user={user} />
+                ) : (
+                  <>
+                    <Button asChild variant="outline">
+                      <a href={auth.login.url}>{auth.login.title}</a>
+                    </Button>
+                    <Button asChild>
+                      <a href={auth.signup.url}>{auth.signup.title}</a>
+                    </Button>
+                  </>
+                )}
                 <ThemeToggle />
               </div>
             </div>

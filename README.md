@@ -18,8 +18,8 @@ Optionally, we can add examples on how to handle CMS blocks and create mechanism
 
 ### Core Framework
 
-- **Next.js** - React based framework with App Router
-- **React**
+- **Next.js 16** - React based framework with App Router and Turbopack
+- **React 19** - Latest with Client & Server Components
 - **TypeScript 5** - Type safety, better developer experience, better output from AI tools
 
 ### UI & Styling
@@ -33,7 +33,7 @@ Optionally, we can add examples on how to handle CMS blocks and create mechanism
 ### Forms & Validation
 
 - **React Hook Form** - Performant forms with easy validation
-- **Zod 4.0.5** - TypeScript-first schema validation
+- **Zod 4** - TypeScript-first schema validation
 - **@hookform/resolvers** - React Hook Form + Zod integration
 
 ### Development Tools
@@ -43,10 +43,11 @@ Optionally, we can add examples on how to handle CMS blocks and create mechanism
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 
-### HTTP & Services
+### Data Fetching & State Management
 
-- **Axios** - HTTP client for API calls
-- **Custom Service Layer** - Organized API service architecture
+- **TanStack Query 5** - Server state management, caching, and data synchronization
+- **Native Fetch API** - Modern HTTP client (replaced Axios)
+- **Custom Hooks Layer** - Organized data fetching with React hooks
 
 ## Project Structure
 
@@ -69,14 +70,24 @@ src/
 │   ├── motion-primitives/ # Animation components
 │   └── ui/              # Base UI components (Design System)
 │
-├── services/            # API services and business logic
-│   ├── api.types.ts    # Shared API type definitions
-│   ├── http-client.tsx # HTTP client configuration
+├── services/            # API hooks and type definitions
+│   ├── user/           # User authentication hooks
+│   │   ├── user.hooks.ts   # TanStack Query hooks for login/register
+│   │   └── user.types.ts   # User-related types
+│   ├── navigation/     # Navigation menu hooks
+│   │   ├── navigation.hooks.ts  # TanStack Query hooks for navigation
+│   │   └── navigation.types.ts  # Navigation types
+│   ├── pages/          # CMS pages hooks
+│   │   ├── pages.hooks.ts  # TanStack Query hooks for pages
+│   │   └── pages.types.ts  # Page types
+│   └── index.ts        # Barrel export
 │
 ├── config/             # Configuration files
 │   └── env.ts         # Environment variables handling
 │
 └── lib/               # Utility functions
+    ├── fetch-client.ts # Functional HTTP client wrapper
+    ├── query-client-provider.tsx # TanStack Query setup
     └── utils.ts       # Helper functions and utilities
 ```
 
@@ -85,34 +96,40 @@ src/
 ### Prerequisites
 
 - Node.js (Latest LTS version recommended)
-- npm or yarn package manager
+- pnpm package manager (install globally: `npm install -g pnpm`)
+- Mockoon (for API mocking) - import `mockoon.json` from repo root
 
 ### Installation
 
-Create .env.local file base on the .env.example and provide proper values. For now it's just the api url and typically this can be set to `http://localhost:4000` if you're using mockoon server.
+1. Create `.env.local` file based on `.env.example`:
+   ```bash
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+   ```
 
-```bash
-# Install dependencies
-npm install
+2. Install dependencies and start development:
+   ```bash
+   # Install dependencies
+   pnpm install
 
-# Start development server
-npm run dev
+   # Start Mockoon server (import mockoon.json first)
+   # Then start development server
+   pnpm dev
 
-# Start Storybook
-npm run storybook
-```
+   # Start Storybook (optional)
+   pnpm storybook
+   ```
 
 ### Available Scripts
 
 ```bash
-npm run dev          # Start development server with Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run storybook    # Start Storybook development server
-npm run build-storybook # Build Storybook for production
-npm run test:unit    # Run unit tests
-npm run test:storybook # Run Storybook tests
+pnpm dev             # Start development server with Turbopack
+pnpm build           # Build for production
+pnpm start           # Start production server
+pnpm lint            # Run ESLint
+pnpm storybook       # Start Storybook development server
+pnpm build-storybook # Build Storybook for production
+pnpm test:unit       # Run unit tests
+pnpm test:storybook  # Run Storybook tests
 ```
 
 ### Recommended VS Code extensions
@@ -127,85 +144,221 @@ Vitest
 
 ### Develop base UI component
 
-Those are the ones placed in the `src\components\ui` folder. The most basic building blocks for UI. They should never consist any logic specific to any particular app. You can use ShadCN components here. For example, if a pagination component is needed, you can either install it from ShadCN with `npx shadcn@latest add pagination` command or create such component from scratch. Whatever is easier. Remember that all the ShadCN components are treated as local code after they are installed so feel free to update them, change their appearance or do whatever is needed. Those are just startin points. This is not a predefined library. You can and you should make changes to it.
-The easiesst way to work with those is using Storybook. Running app is not needed at this stage.
+Located in `src/components/ui/` - the most basic building blocks for UI. They should never contain any logic specific to any particular app.
 
-### Develop more complex parts of page
+**Using ShadCN components:**
+```bash
+npx shadcn@latest add pagination
+```
 
-Those components will be located in the `src\cimponents\blocks` folder. Consider them more like a feature blocks. Things that actually contain some logic, persist state, talk to api and so on. Those can be anything, for example - a hero section of the page, a login form, some faq section on page and so on. Just look at examples that are already provided.
+Remember: ShadCN components are treated as local code after installation. Feel free to update them, change their appearance, or modify as needed. They're just starting points, not a locked library.
+
+**Development workflow:**
+- Use Storybook for isolated component development
+- Each component has `.tsx` and `.stories.tsx` files
+- No running app needed at this stage
+
+### Develop complex page blocks
+
+Located in `src/components/blocks/` - feature-level components that contain business logic, state management, and API integration.
+
+**Examples:**
+- Hero sections
+- Login/register forms
+- FAQ sections
+- Product listings
+
+**Characteristics:**
+- Use TanStack Query hooks for data fetching
+- Compose UI components and form elements
+- Handle loading and error states
+- See existing examples in the folder
 
 ### Develop forms
 
-Forms are a special case of a UI block as they need to provide quite complex and very specific logic. To keep all the common logic of trakcing input errors, clearing values, blokcing UI, showing progress and so on, all the form components are encapsulated into their own components in the `src\component\form-elements` folder.
-Building those form input should be considered a "build and forget" type of task. So once they're ready, we should just use them across app. Currently those base elements support regular text and password inputs only.
+Located in `src/components/form-elements/` - specialized form inputs integrated with React Hook Form.
 
-### Develop api integration
+**Characteristics:**
+- Built on top of UI components
+- Automatic error tracking and validation
+- "Build and forget" approach - create once, reuse everywhere
+- Currently support text and password inputs
+- Submit buttons automatically handle loading/disabled states
 
-This the client-server communication is handled in the `src\services` folder. Here we have all the type definitions and all the logic responsible for frontent-backend communication.
-Important note: Need some brainstorming about mocking of backend apis. Currently the "mockoon" app is used for that (import file in root of repo) so keep in mind that a mockoon server needs to be up and running for mocked responses to work.
-Testing: this app layer should be covered by tests for different types of responses we can get from CMS. Especially for different http error codes or other edge cases. See example test files in the `navaigation` or `user` folders.
+### Develop API integration
+
+Located in `src/services/` - all client-server communication using TanStack Query hooks.
+
+**Architecture:**
+- Each service domain has its own folder (user, navigation, pages)
+- `*.hooks.ts` - TanStack Query hooks (queries and mutations)
+- `*.types.ts` - TypeScript type definitions
+- Uses `fetchClient` from `src/lib/fetch-client.ts`
+
+**Example - Query hook:**
+```typescript
+export function useNavigation(id: number) {
+  return useQuery({
+    queryKey: navigationKeys.byId(id),
+    queryFn: async () => {
+      const response = await fetchClient.get<NavigationResponse>(`/dwapi/frontend/navigations/${id}`)
+      return response.nodes.filter(node => node.showInMenu)
+    },
+    staleTime: 5 * 60 * 1000
+  })
+}
+```
+
+**Example - Mutation hook:**
+```typescript
+export function useLogin() {
+  return useMutation({
+    mutationFn: async (credentials: LoginRequest) => {
+      return fetchClient.post<LoginResponse>('/dwapi/users/authenticate', credentials)
+    }
+  })
+}
+```
+
+**API Mocking:**
+- Mockoon server required for development
+- Import `mockoon.json` from repo root
+- Start Mockoon before running the app
+- API base URL: `http://localhost:4000`
+
+**Testing:**
+- Test files: `*.test.ts` alongside hooks
+- Cover different HTTP error codes and edge cases
+- See `src/services/user/user.test.ts` and `src/services/navigation/navigation.test.ts`
 
 ## Forms deep dive
 
-Our login form can be a good reference to core concepts behind building forms.
-Let's analyse the structure top to bottom, starting at the `login-block.tsx`.
-This is the general UI block representing logical part of UI that shows the form with all it's surroundings. In this case those inclide some additional image, card type look or a link to policy agreement (might be irrelevant, this is just an example of UI).
-Inside that block we have the actual `<LoginForm />` component, placed in the `form` folder.
-Two important parts aredefined here
+Example: Login form in [src/components/blocks/login/](src/components/blocks/login/)
 
-1. The .types.ts file ocntains a schema definition for the form
-2. The .tsx file contain the actual form with it's logic.
-   This .tsx file is a meat and potatoes of our form. Here we glue up the schema with the UI, define initial values if there are any and handle form submission.
-   Note that individual form fields should work "automagically" and track error states on their own. The same applies to the submit button. IT should handle it's own state automatically.
-   The only thing that is done manually now is how the errors are shown (not input validation errors but errors after form is submitted). Those can comein different formats from api and we might want to show them differently depending on the form so this part is not automated.
+### Structure
+
+**1. Block wrapper** (`login-block.tsx`)
+- General UI block with form surroundings
+- Includes styling, card layout, images, policy links
+- Renders the `<LoginForm />` component
+
+**2. Form component** (`form/login-form.tsx`)
+- Contains the actual form logic
+- Uses React Hook Form + Zod validation
+- Integrates with TanStack Query mutation
+
+**3. Schema definition** (`form/auth.types.ts`)
+- Zod schema for validation
+- TypeScript types derived from schema
+
+### Implementation pattern
+
+```typescript
+// 1. Define schema
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+})
+
+// 2. Create form with hook
+const form = useForm<LoginFormData>({
+  resolver: zodResolver(loginSchema),
+  defaultValues: { email: '', password: '' }
+})
+
+// 3. Use mutation hook
+const loginMutation = useLogin()
+
+// 4. Handle submission
+const onSubmit = async (data: LoginFormData) => {
+  loginMutation.mutate(data, {
+    onSuccess: (response) => { /* handle success */ }
+  })
+}
+
+// 5. Render form
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <InputField form={form} name="email" label="Email" />
+    <PasswordField form={form} name="password" label="Password" />
+    <Button loading={loginMutation.isPending}>Login</Button>
+  </form>
+</Form>
+```
+
+### Automatic features
+- Individual fields track validation errors automatically
+- Submit button handles loading/disabled states automatically
+- Form validation happens on blur and submit
+
+### Manual handling
+- API errors after submission (not validation errors)
+- Can vary by form depending on error format from backend
 
 ## Configuration deep dive
 
-All config entries are store in the .env.local file.
-Also we have `app\congig\env.ts` file that serves as a wrapper for the config entries. It is validated at app startup and provides type safety way to read config entries.
+All configuration stored in `.env.local` file.
 
-## Project Arhictecture roadmap
+### Type-safe configuration
+Located in [src/config/env.ts](src/config/env.ts):
+- Validates environment variables at app startup using Zod
+- Provides type-safe access to config values
+- Never access `process.env` directly outside this file
+
+**Usage:**
+```typescript
+import { env } from '@/config/env'
+
+const apiUrl = env.NEXT_PUBLIC_API_BASE_URL
+```
+
+## Project Architecture roadmap
 
 ✅ Project structure defined
 
-✅ Tailwind CSS configured
+✅ Tailwind CSS 4 configured
 
-✅ ShadCN examples provided
+✅ ShadCN component examples provided
 
-✅ Example blocks provided
+✅ Example blocks provided (hero, login, register)
 
 ✅ Storybook configured
 
-✅ Vites configured and sample unit tests provided
+✅ Vitest configured with sample unit tests
 
-✅ Mockoon file provided
+✅ Mockoon file provided for API mocking
 
-✅ Type safe configuration created
+✅ Type-safe configuration created
 
-✅ Sample service layer provided
+✅ TanStack Query integration complete
+
+✅ Functional fetch client implemented
+
+✅ Service hooks layer provided (user, navigation, pages)
 
 ✅ Prettier rules defined
 
-✅ Forms handling base controls created
+✅ Form handling base controls created
 
-✅ Sample form created
+✅ Sample forms created (login, register)
 
-At this moment the last tool left to configure and provide examples is some frontend side state management tool I'd recomment Zustand as it's easy to setup and use.
+✅ Next.js DevTools MCP server configured
+
+**Future considerations:**
+- Client-side state management (Zustand) for complex UI state
+- Additional form field types (select, checkbox, radio, etc.)
+- Storybook 10 upgrade when stable (for Next.js 16 compatibility)
 
 ## Business cases roadmap
 
-Login flow - user should be able to log in and app should download his most relevant information when he logs in and store that locally for further use. That will inclide probably some basic profile data or cms navigation for available for authenitcated users only.
+### Completed
+✅ **Authentication flow** - Login and registration with JWT tokens, role-based navigation
 
-Product Quick Search - todo
-
-Product Browser - todo
-
-Product Details Page - todo
-
-Cart - todo
-
-Checkout - todo
-
-Profile Pages - todo
-
-Order Placement - todo
+### To Do
+- **Product Quick Search** - Search functionality with autocomplete
+- **Product Browser** - Product listing with filters and pagination
+- **Product Details Page** - Individual product view with images, description, variants
+- **Shopping Cart** - Add/remove items, update quantities, persist cart state
+- **Checkout** - Multi-step checkout process with address and payment
+- **Profile Pages** - User profile, order history, saved addresses
+- **Order Placement** - Create and track orders

@@ -1,6 +1,7 @@
-import { Book,  Sunset,  Trees,  Zap } from 'lucide-react'
+import { Book, Sunset, Trees, Zap } from 'lucide-react'
 import { DesktopNavigation } from './_components/desktop-navigation'
 import { MobileNavigation } from './_components/mobile-navigation'
+import { getCurrentUser } from '@/lib/auth'
 
 export interface StaticNodeItem {
   title: string
@@ -83,12 +84,14 @@ const authNodes: AuthNodes = {
   signup: { title: 'Sign up', url: '/register' },
 }
 
-const Header = () => {
+const Header = async () => {
+  const user = await getCurrentUser()
+
   return (
     <section className="py-4">
       <div className="container">
-        <DesktopNavigation staticNodes={staticNodes} authNodes={authNodes} />
-        <MobileNavigation staticNodes={staticNodes} authNodes={authNodes} />
+        <DesktopNavigation staticNodes={staticNodes} authNodes={authNodes} user={user} />
+        <MobileNavigation staticNodes={staticNodes} authNodes={authNodes} user={user} />
       </div>
     </section>
   )

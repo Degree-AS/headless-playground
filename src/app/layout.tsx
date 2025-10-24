@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { Toaster } from '@/components/ui/sonner/sonner'
+import { QueryProvider } from '@/lib/query-client-provider'
 
 export const metadata: Metadata = {
   title: 'DynamicWeb Headless Playground',
@@ -18,19 +19,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col items-center">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="container flex min-h-screen flex-col">
-            <Header />
-            <div className="flex flex-1">{children}</div>
-            <Footer />
-          </div>
-          <Toaster />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="container flex min-h-screen flex-col">
+              <Header />
+              <div className="flex flex-1">{children}</div>
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   )

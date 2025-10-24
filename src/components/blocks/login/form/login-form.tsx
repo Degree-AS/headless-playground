@@ -2,15 +2,16 @@
 
 import { Form, InputField, PasswordField } from '@/components/form-elements'
 import { Button } from '@/components/ui'
-import { userService } from '@/services'
+import { useLogin } from '@/services/user/user.hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { LoginFormData, loginSchema } from './auth.types'
 
 export function LoginForm() {
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+  const loginMutation = useLogin()
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -22,24 +23,26 @@ export function LoginForm() {
   })
 
   const onSubmit = async (data: LoginFormData): Promise<void> => {
-    setError(null)
-
-    try {
-      const result = await userService.login({
+    loginMutation.mutate(
+      {
         email: data.email,
         password: data.password,
-      })
+      },
+      {
+        onSuccess: (response) => {
+          // Save token and user data to cookies
+          document.cookie = `auth_token=${response.token}; path=/; max-age=86400` // 1 day
+          document.cookie = `user_data=${JSON.stringify(response.user)}; path=/; max-age=86400`
 
-      if (result.error) {
-        setError(result.error)
-      } else {
-        // Success case
-        form.reset()
-        setError(null)
-      }
-    } catch {
-      setError('An unexpected error occurred')
-    }
+          // Redirect based on role
+          if (response.user.role === 'admin') {
+            router.push('/admin')
+          } else {
+            router.push('/')
+          }
+        },
+      },
+    )
   }
 
   return (
@@ -51,9 +54,9 @@ export function LoginForm() {
             <p className="text-muted-foreground text-balance">Login to your Degree account</p>
           </div>
 
-          {error && (
+          {loginMutation.error && (
             <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-              {error}
+              {loginMutation.error.message}
             </div>
           )}
 
@@ -77,8 +80,8 @@ export function LoginForm() {
           <Button
             type="submit"
             className="w-full"
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting}
+            loading={loginMutation.isPending}
+            disabled={loginMutation.isPending}
           >
             Login
           </Button>

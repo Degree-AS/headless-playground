@@ -2,7 +2,7 @@
 
 import { Form, InputField, PasswordField } from '@/components/form-elements'
 import { Button } from '@/components/ui'
-import { userService } from '@/services'
+import { useRegister } from '@/services/user/user.hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -11,9 +11,9 @@ import { RegisterFormData, registerSchema } from '../../login/form/auth.types'
 import { RegistrationSuccess } from '../registration-success'
 
 export function RegisterForm() {
-  const [error, setError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
   const [registeredEmail, setRegisteredEmail] = useState('')
+  const registerMutation = useRegister()
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -28,26 +28,20 @@ export function RegisterForm() {
   })
 
   const onSubmit = async (data: RegisterFormData): Promise<void> => {
-    setError(null)
-
-    try {
-      const result = await userService.register({
+    registerMutation.mutate(
+      {
         email: data.email,
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-      })
-
-      if (result.error) {
-        setError(result.error)
-      } else {
-        // Success case
-        setRegisteredEmail(data.email)
-        setIsSuccess(true)
+      },
+      {
+        onSuccess: () => {
+          setRegisteredEmail(data.email)
+          setIsSuccess(true)
+        },
       }
-    } catch {
-      setError('An unexpected error occurred')
-    }
+    )
   }
 
   if (isSuccess) {
@@ -65,9 +59,9 @@ export function RegisterForm() {
             </p>
           </div>
 
-          {error && (
+          {registerMutation.error && (
             <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-              {error}
+              {registerMutation.error.message}
             </div>
           )}
 
@@ -119,8 +113,8 @@ export function RegisterForm() {
           <Button
             type="submit"
             className="w-full"
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting}
+            loading={registerMutation.isPending}
+            disabled={registerMutation.isPending}
           >
             Create Account
           </Button>

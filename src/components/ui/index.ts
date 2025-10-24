@@ -1,7 +1,14 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion/accordion'
 import { Button } from './button/button'
 import { Card, CardContent, CardHeader } from './card/card'
-import { DropdownMenu } from './dropdown-menu/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './dropdown-menu/dropdown-menu'
 import { Input, InputProps } from './input/input'
 import { Label } from './label/label'
 import {
@@ -24,6 +31,11 @@ export {
   CardHeader,
   CardContent,
   DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Input,
   Label,
   NavigationMenu,

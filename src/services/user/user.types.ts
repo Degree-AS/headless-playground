@@ -1,3 +1,13 @@
+export type UserRole = 'admin' | 'contentEditor' | 'user'
+
+export type User = {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  role: UserRole
+}
+
 export type LoginRequest = {
   email: string
   password: string
@@ -5,6 +15,7 @@ export type LoginRequest = {
 
 export type LoginResponse = {
   token: string
+  user: User
 }
 
 export type RegisterRequest = {
@@ -16,10 +27,5 @@ export type RegisterRequest = {
 
 export type RegisterResponse = {
   token: string
-  user: {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-  }
+  user: User
 }

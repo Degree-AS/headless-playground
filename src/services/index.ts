@@ -1,5 +1,9 @@
-export { navigationService } from './navigation/navigation.service'
+// Types
 export * from './navigation/navigation.types'
-
-export { userService } from './user/user.service'
+export * from './pages/pages.types'
 export * from './user/user.types'
+
+// TanStack Query hooks (recommended)
+export * from './navigation/navigation.hooks'
+export * from './user/user.hooks'
+export * from './pages/pages.hooks'
