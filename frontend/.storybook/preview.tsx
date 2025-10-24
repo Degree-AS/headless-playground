@@ -1,5 +1,21 @@
-import type { Preview } from '@storybook/nextjs-vite'
+import type { Preview, Decorator } from '@storybook/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import '../src/app/globals.css'
+
+// Create a client for Storybook stories
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+      gcTime: 5 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 0,
+    },
+  },
+})
 
 const preview: Preview = {
   parameters: {
@@ -17,6 +33,14 @@ const preview: Preview = {
       test: 'todo',
     },
   },
+
+  decorators: [
+    ((Story) => (
+      <QueryClientProvider client={queryClient}>
+        <Story />
+      </QueryClientProvider>
+    )) as Decorator,
+  ],
 }
 
 export default preview
