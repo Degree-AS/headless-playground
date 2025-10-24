@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Loader2,  Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button/button'
 
 /**

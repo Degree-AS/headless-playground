@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './dropdown-menu/dropdown-menu'
-import { Input, InputProps } from './input/input'
+import { Input } from './input/input'
 import { Label } from './label/label'
 import {
   NavigationMenu,
