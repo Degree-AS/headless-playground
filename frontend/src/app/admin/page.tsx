@@ -6,7 +6,7 @@ export default async function AdminPage() {
   const user = await getCurrentUser()
 
   return (
-    <div className="container py-8">
+    <>
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <p className="text-muted-foreground mt-2">
@@ -45,6 +45,6 @@ export default async function AdminPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </>
   )
 }

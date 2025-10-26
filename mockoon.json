@@ -1,1 +1,360 @@
-{"openapi":"3.0.0","info":{"title":"Demo API","version":"1.0.0"},"servers":[{"url":"http://localhost:4000/"}],"paths":{"/dwapi/frontend/navigations/{navId}":{"get":{"description":"","responses":{"200":{"description":"","content":{"application/json":{"example":"{\r\n    \"nodes\": [\r\n        {\r\n            \"pageId\": 6869,\r\n            \"name\": \"Home\",\r\n            \"link\": \"/home\",\r\n            \"level\": 1,\r\n            \"isClickable\": true,\r\n            \"inPath\": false,\r\n            \"isActive\": false,\r\n            \"showInSitemap\": false,\r\n            \"showInBreadcrumb\": true,\r\n            \"showInMenu\": true,\r\n            \"nodes\": []\r\n        },\r\n        {\r\n            \"pageId\": 5862,\r\n            \"name\": \"Shop\",\r\n            \"link\": \"/shop\",\r\n            \"level\": 1,\r\n            \"isClickable\": true,\r\n            \"inPath\": false,\r\n            \"isActive\": false,\r\n            \"showInSitemap\": true,\r\n            \"showInBreadcrumb\": true,\r\n            \"showInMenu\": true,\r\n            \"nodes\": [\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP130\",\r\n                    \"name\": \"E-bikes\",\r\n                    \"link\": \"/shop/e-bikes\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                },\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP1\",\r\n                    \"name\": \"Bikes\",\r\n                    \"link\": \"/shop/bikes\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                },\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP9\",\r\n                    \"name\": \"Clothing\",\r\n                    \"link\": \"/shop/clothing\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                },\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP46\",\r\n                    \"name\": \"Components\",\r\n                    \"link\": \"/shop/components\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                },\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP156\",\r\n                    \"name\": \"Accessories\",\r\n                    \"link\": \"/shop/accessories\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                },\r\n                {\r\n                    \"pageId\": 5862,\r\n                    \"groupId\": \"GROUP35\",\r\n                    \"name\": \"Sale\",\r\n                    \"link\": \"/shop/sale\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"pageId\": 107,\r\n            \"name\": \"About\",\r\n            \"link\": \"/about\",\r\n            \"level\": 1,\r\n            \"isClickable\": true,\r\n            \"inPath\": false,\r\n            \"isActive\": false,\r\n            \"showInSitemap\": true,\r\n            \"showInBreadcrumb\": true,\r\n            \"showInMenu\": true,\r\n            \"nodes\": [\r\n                {\r\n                    \"pageId\": 106,\r\n                    \"name\": \"Contact\",\r\n                    \"link\": \"/about/contact\",\r\n                    \"level\": 2,\r\n                    \"isClickable\": true,\r\n                    \"inPath\": false,\r\n                    \"isActive\": false,\r\n                    \"showInSitemap\": true,\r\n                    \"showInBreadcrumb\": true,\r\n                    \"showInMenu\": true,\r\n                    \"nodes\": []\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"pageId\": 8345,\r\n            \"name\": \"Posts\",\r\n            \"link\": \"/posts\",\r\n            \"level\": 1,\r\n            \"isClickable\": true,\r\n            \"inPath\": false,\r\n            \"isActive\": false,\r\n            \"showInSitemap\": true,\r\n            \"showInBreadcrumb\": true,\r\n            \"showInMenu\": true,\r\n            \"nodes\": []\r\n        }\r\n    ],\r\n    \"parameters\": {}\r\n}"}},"headers":{"Access-Control-Allow-Origin":{"schema":{"type":"string"},"example":"*"},"Access-Control-Allow-Methods":{"schema":{"type":"string"},"example":"GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"},"Access-Control-Allow-Headers":{"schema":{"type":"string"},"example":"Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"}}},"401":{"description":"","content":{"application/json":{"example":"{}"}},"headers":{"Access-Control-Allow-Origin":{"schema":{"type":"string"},"example":"*"},"Access-Control-Allow-Methods":{"schema":{"type":"string"},"example":"GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"},"Access-Control-Allow-Headers":{"schema":{"type":"string"},"example":"Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"}}}}}},"/dwapi/users/authenticate":{"post":{"description":"","responses":{"200":{"description":"","content":{"application/json":{"example":"{\r\n  \"token\": \"123456789\"\r\n}"}},"headers":{"Access-Control-Allow-Origin":{"schema":{"type":"string"},"example":"*"},"Access-Control-Allow-Methods":{"schema":{"type":"string"},"example":"GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"},"Access-Control-Allow-Headers":{"schema":{"type":"string"},"example":"Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"}}},"403":{"description":"","content":{"application/json":{"example":"{}"}},"headers":{"Access-Control-Allow-Origin":{"schema":{"type":"string"},"example":"*"},"Access-Control-Allow-Methods":{"schema":{"type":"string"},"example":"GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"},"Access-Control-Allow-Headers":{"schema":{"type":"string"},"example":"Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"}}},"404":{"description":"","content":{"application/json":{"example":"{}"}},"headers":{"Access-Control-Allow-Origin":{"schema":{"type":"string"},"example":"*"},"Access-Control-Allow-Methods":{"schema":{"type":"string"},"example":"GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"},"Access-Control-Allow-Headers":{"schema":{"type":"string"},"example":"Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"}}}}}}}}
+{
+  "uuid": "a8c9e6d1-4f2b-4a5c-8d9e-1f2a3b4c5d6e",
+  "lastMigration": 33,
+  "name": "Demo API",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 4000,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "4d2738de-046d-4bac-ad19-6092afcd70ec",
+      "type": "http",
+      "documentation": "Get navigation structure by ID",
+      "method": "get",
+      "endpoint": "dwapi/frontend/navigations/:navId",
+      "responses": [
+        {
+          "uuid": "e3c5c8ea-73fe-48de-a9f7-28def31f9135",
+          "body": "{\n    \"nodes\": [\n        {\n            \"pageId\": 6869,\n            \"name\": \"Home\",\n            \"link\": \"/home\",\n            \"level\": 1,\n            \"isClickable\": true,\n            \"inPath\": false,\n            \"isActive\": false,\n            \"showInSitemap\": false,\n            \"showInBreadcrumb\": true,\n            \"showInMenu\": true,\n            \"nodes\": []\n        },\n        {\n            \"pageId\": 5862,\n            \"name\": \"Shop\",\n            \"link\": \"/shop\",\n            \"level\": 1,\n            \"isClickable\": true,\n            \"inPath\": false,\n            \"isActive\": false,\n            \"showInSitemap\": true,\n            \"showInBreadcrumb\": true,\n            \"showInMenu\": true,\n            \"nodes\": [\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP130\",\n                    \"name\": \"E-bikes\",\n                    \"link\": \"/shop/e-bikes\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                },\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP1\",\n                    \"name\": \"Bikes\",\n                    \"link\": \"/shop/bikes\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                },\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP9\",\n                    \"name\": \"Clothing\",\n                    \"link\": \"/shop/clothing\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                },\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP46\",\n                    \"name\": \"Components\",\n                    \"link\": \"/shop/components\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                },\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP156\",\n                    \"name\": \"Accessories\",\n                    \"link\": \"/shop/accessories\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                },\n                {\n                    \"pageId\": 5862,\n                    \"groupId\": \"GROUP35\",\n                    \"name\": \"Sale\",\n                    \"link\": \"/shop/sale\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                }\n            ]\n        },\n        {\n            \"pageId\": 107,\n            \"name\": \"About\",\n            \"link\": \"/about\",\n            \"level\": 1,\n            \"isClickable\": true,\n            \"inPath\": false,\n            \"isActive\": false,\n            \"showInSitemap\": true,\n            \"showInBreadcrumb\": true,\n            \"showInMenu\": true,\n            \"nodes\": [\n                {\n                    \"pageId\": 106,\n                    \"name\": \"Contact\",\n                    \"link\": \"/about/contact\",\n                    \"level\": 2,\n                    \"isClickable\": true,\n                    \"inPath\": false,\n                    \"isActive\": false,\n                    \"showInSitemap\": true,\n                    \"showInBreadcrumb\": true,\n                    \"showInMenu\": true,\n                    \"nodes\": []\n                }\n            ]\n        },\n        {\n            \"pageId\": 8345,\n            \"name\": \"Posts\",\n            \"link\": \"/posts\",\n            \"level\": 1,\n            \"isClickable\": true,\n            \"inPath\": false,\n            \"isActive\": false,\n            \"showInSitemap\": true,\n            \"showInBreadcrumb\": true,\n            \"showInMenu\": true,\n            \"nodes\": []\n        }\n    ],\n    \"parameters\": {}\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "e5d76122-1896-4ef3-ac41-eb169ba58058",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "Unauthorized",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "caee04a5-6c49-4bcf-a565-df789b9aab8a",
+      "type": "http",
+      "documentation": "User authentication endpoint",
+      "method": "post",
+      "endpoint": "dwapi/users/authenticate",
+      "responses": [
+        {
+          "uuid": "2ce16881-0392-4214-ba9d-855a204df81b",
+          "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzAwMDAwMDB9.admin-token-987654321\",\n  \"user\": {\n    \"id\": \"1\",\n    \"email\": \"admin@example.com\",\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"role\": \"admin\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success - Admin login",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "email",
+              "value": "admin@example.com",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "body",
+              "modifier": "password",
+              "value": "admin123",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "3ebe5ade-e6e3-4b9d-8330-85099a3c25e0",
+          "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlhdCI6MTczMDAwMDAwMH0.demo-token-123456789\",\n  \"user\": {\n    \"id\": \"2\",\n    \"email\": \"demo@example.com\",\n    \"firstName\": \"Demo\",\n    \"lastName\": \"User\",\n    \"role\": \"user\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success - Regular user login",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "email",
+              "value": "demo@example.com",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "body",
+              "modifier": "password",
+              "value": "demo123",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "082f9877-7f6f-4612-8a09-d8f38179afd2",
+          "body": "{\n  \"error\": \"Invalid credentials\",\n  \"message\": \"Username or password is incorrect\"\n}",
+          "latency": 0,
+          "statusCode": 403,
+          "label": "Forbidden - Invalid credentials",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "435c4921-6997-43ac-950b-8eeadd7a06d3",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Not Found",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "89b0400c-02e4-44d2-bae7-0cc85ddd2dca",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "",
+      "responses": [
+        {
+          "uuid": "e4795da9-d230-41b8-93d0-22975426d045",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "4d2738de-046d-4bac-ad19-6092afcd70ec"
+    },
+    {
+      "type": "route",
+      "uuid": "caee04a5-6c49-4bcf-a565-df789b9aab8a"
+    },
+    {
+      "type": "route",
+      "uuid": "89b0400c-02e4-44d2-bae7-0cc85ddd2dca"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

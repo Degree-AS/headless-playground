@@ -1,0 +1,4 @@
+/* Custom styles for Puck editor canvas */
+[class*='_PuckCanvas_'] {
+  padding-bottom: 150px !important;
+}

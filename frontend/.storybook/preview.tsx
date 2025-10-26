@@ -1,4 +1,4 @@
-import type { Preview, Decorator } from '@storybook/react'
+import type { Decorator, Preview } from '@storybook/nextjs'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import '../src/app/globals.css'
 

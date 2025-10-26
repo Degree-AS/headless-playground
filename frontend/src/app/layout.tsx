@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
-import { Footer } from '@/components/layout/footer'
-import { Header } from '@/components/layout/header'
 import { Toaster } from '@/components/ui/sonner/sonner'
 import { QueryProvider } from '@/lib/query-client-provider'
 
@@ -18,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex flex-col items-center">
+      <body>
         <QueryProvider>
           <ThemeProvider
             attribute="class"
@@ -26,11 +24,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="container flex min-h-screen flex-col">
-              <Header />
-              <div className="flex flex-1">{children}</div>
-              <Footer />
-            </div>
+            {children}
             <Toaster />
           </ThemeProvider>
         </QueryProvider>
