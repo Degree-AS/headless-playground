@@ -1,59 +1,64 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import debounce from 'lodash/debounce'
 import type { Data } from '@measured/puck'
-import type { Page } from './types'
+import type { Page, PageData } from '@/components/editor/types'
+import { generateSlug } from '@/utils'
 
-// Default data for new pages
-const getInitialPageData = (): Data => ({
+/**
+ * Creates initial page data with empty content
+ * All pages start empty - users add blocks as needed
+ */
+const getInitialPageData = (name: string, slug?: string): PageData => ({
   content: [],
-  root: {},
+  root: {
+    title: name,
+    slug: slug ?? generateSlug(name),
+    metaDescription: '',
+    metaKeywords: '',
+  },
 })
 
-// Default home page with hero block
-const getInitialHomePageData = (): Data => ({
-  content: [
-    {
-      type: 'HeroBlock',
-      props: {
-        id: 'hero-1',
-        title: 'Modern Solutions for Customer Engagement',
-        subtitle:
-          'Highly customizable components for building modern websites and applications that look and feel the way you mean it.',
-        primaryButtonText: 'Start Building',
-        primaryButtonHref: '#',
-        secondaryButtonText: 'Request a demo',
-        secondaryButtonHref: '#',
-      },
-    },
-  ],
-  root: {},
-})
-
-// Default pages structure
+/**
+ * Default pages structure with home page
+ */
 const getDefaultPages = (): Page[] => [
   {
     id: 'home',
     name: 'Home',
     path: '/',
-    content: getInitialHomePageData(),
+    content: getInitialPageData('Home', ''), // Empty slug for home
     locked: true,
     children: [],
   },
 ]
 
 interface EditorStore {
-  // State
+  // Page state
   pages: Page[]
   currentPageId: string
-  isLoaded: boolean
 
-  // Actions
-  setIsLoaded: (loaded: boolean) => void
+  // UI state
+  isLoaded: boolean
+  puckVersion: number
+  lastExternalName: string | null
+  debouncedRename: ReturnType<typeof debounce> | null
+
+  // Page actions
   setCurrentPageId: (id: string) => void
   updatePageContent: (pageId: string, newData: Data) => void
   addPage: (parentId: string | null) => void
   deletePage: (pageId: string) => void
   renamePage: (pageId: string, newName: string) => void
+
+  // UI actions
+  setIsLoaded: (loaded: boolean) => void
+  incrementPuckVersion: () => void
+  updateLastExternalName: (name: string) => void
+  resetPuckVersion: () => void
+  initializeDebouncedRename: (
+    renameFunction: (pageId: string, newName: string) => void
+  ) => void
 
   // Selectors
   getCurrentPage: () => Page | null
@@ -63,14 +68,17 @@ interface EditorStore {
 export const useEditorStore = create<EditorStore>()(
   persist(
     (set, get) => ({
-      // Initial state
+      // Initial page state
       pages: getDefaultPages(),
       currentPageId: 'home',
+
+      // Initial UI state
       isLoaded: false,
+      puckVersion: 0,
+      lastExternalName: null,
+      debouncedRename: null,
 
-      // Actions
-      setIsLoaded: (loaded) => set({ isLoaded: loaded }),
-
+      // Page actions
       setCurrentPageId: (id) => set({ currentPageId: id }),
 
       updatePageContent: (pageId, newData) => {
@@ -96,7 +104,7 @@ export const useEditorStore = create<EditorStore>()(
           id: `page-${Date.now()}`,
           name: 'New Page',
           path: `/page-${Date.now()}`,
-          content: getInitialPageData(),
+          content: getInitialPageData('New Page'),
           children: [],
         }
 
@@ -133,6 +141,21 @@ export const useEditorStore = create<EditorStore>()(
       },
 
       deletePage: (pageId) => {
+        // Find all IDs that will be deleted (page and all its children)
+        const getAllPageIds = (page: Page): string[] => {
+          const ids = [page.id]
+          if (page.children) {
+            page.children.forEach((child) => {
+              ids.push(...getAllPageIds(child))
+            })
+          }
+          return ids
+        }
+
+        // Find the page being deleted to get all child IDs
+        const pageToDelete = get().findPage(pageId)
+        const deletedIds = pageToDelete ? getAllPageIds(pageToDelete) : [pageId]
+
         const deleteFromTree = (pageList: Page[]): Page[] => {
           return pageList
             .filter((page) => page.id !== pageId)
@@ -146,8 +169,9 @@ export const useEditorStore = create<EditorStore>()(
 
         set((state) => ({
           pages: deleteFromTree(state.pages),
-          currentPageId:
-            state.currentPageId === pageId ? 'home' : state.currentPageId,
+          currentPageId: deletedIds.includes(state.currentPageId)
+            ? 'home'
+            : state.currentPageId,
         }))
       },
 
@@ -155,7 +179,18 @@ export const useEditorStore = create<EditorStore>()(
         const renameInTree = (pageList: Page[]): Page[] => {
           return pageList.map((page) => {
             if (page.id === pageId) {
-              return { ...page, name: newName }
+              // Keep existing root data, only update title
+              return {
+                ...page,
+                name: newName,
+                content: {
+                  ...page.content,
+                  root: {
+                    ...page.content.root,
+                    title: newName,
+                  },
+                },
+              }
             }
             if (page.children) {
               return { ...page, children: renameInTree(page.children) }
@@ -167,6 +202,29 @@ export const useEditorStore = create<EditorStore>()(
         set((state) => ({
           pages: renameInTree(state.pages),
         }))
+      },
+
+      // UI actions
+      setIsLoaded: (loaded) => set({ isLoaded: loaded }),
+
+      incrementPuckVersion: () =>
+        set((state) => ({ puckVersion: state.puckVersion + 1 })),
+
+      updateLastExternalName: (name) => set({ lastExternalName: name }),
+
+      resetPuckVersion: () => set({ puckVersion: 0 }),
+
+      initializeDebouncedRename: (renameFunction) => {
+        const existing = get().debouncedRename
+        if (existing) {
+          existing.cancel()
+        }
+
+        const debouncedFn = debounce((pageId: string, newName: string) => {
+          renameFunction(pageId, newName)
+        }, 300)
+
+        set({ debouncedRename: debouncedFn })
       },
 
       // Selectors
@@ -197,3 +255,14 @@ export const useEditorStore = create<EditorStore>()(
     }
   )
 )
+
+/**
+ * Cleanup function to call on component unmount
+ * Cancels any pending debounced rename operations
+ */
+export const cleanupEditor = () => {
+  const { debouncedRename } = useEditorStore.getState()
+  if (debouncedRename) {
+    debouncedRename.cancel()
+  }
+}

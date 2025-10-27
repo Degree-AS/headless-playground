@@ -4,52 +4,63 @@ import {
   type HeadingBlockProps,
 } from '@/components/blocks/heading/heading-block'
 import { heroBlockConfig, type HeroBlockProps } from '@/components/blocks/hero/hero-block'
+import { useEditor } from '@/hooks'
+import { generateSlug } from '@/utils'
 import { Puck, type Config } from '@measured/puck'
 import '@measured/puck/puck.css'
-import { useEffect } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
-import './editor.css'
 import { EditorLoader } from './EditorLoader'
+import { PageSettingsButton } from './PageSettingsButton'
 import { PageTree } from './PageTree'
-import { useEditorStore } from './use-editor-store'
+import './styles.css'
 
-type Props = {
+type EditorProps = {
   HeadingBlock: HeadingBlockProps
   HeroBlock: HeroBlockProps
 }
 
-// Puck component config
-const config: Config<Props> = {
+const editorConfig: Config<EditorProps> = {
   components: {
     HeadingBlock: headingBlockConfig,
     HeroBlock: heroBlockConfig,
   },
   root: {
-    render: ({ children }) => {
-      return <>{children}</>
+    fields: {
+      title: {
+        type: 'text',
+        label: 'Page Title',
+      },
+      slug: {
+        type: 'text',
+        label: 'URL Slug',
+      },
+      metaDescription: {
+        type: 'textarea',
+        label: 'Meta Description',
+      },
+      metaKeywords: {
+        type: 'text',
+        label: 'Meta Keywords (comma-separated)',
+      },
     },
+    render: ({ children }) => children,
   },
 }
 
-// Editor component
 export function Editor() {
-  // Get state and actions from store
-  const pages = useEditorStore((state) => state.pages)
-  const currentPageId = useEditorStore((state) => state.currentPageId)
-  const isLoaded = useEditorStore((state) => state.isLoaded)
-  const currentPage = useEditorStore((state) => state.getCurrentPage())
-
-  const setCurrentPageId = useEditorStore((state) => state.setCurrentPageId)
-  const updatePageContent = useEditorStore((state) => state.updatePageContent)
-  const addPage = useEditorStore((state) => state.addPage)
-  const deletePage = useEditorStore((state) => state.deletePage)
-  const renamePage = useEditorStore((state) => state.renamePage)
-  const setIsLoaded = useEditorStore((state) => state.setIsLoaded)
-
-  // Mark as loaded on mount (persist middleware handles localStorage)
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [setIsLoaded])
+  const {
+    pages,
+    currentPageId,
+    currentPage,
+    setCurrentPageId,
+    updatePageContent,
+    addPage,
+    deletePage,
+    renamePage,
+    isLoaded,
+    puckVersion,
+    debouncedRename,
+  } = useEditor()
 
   // Show loading state
   if (!isLoaded) {
@@ -75,12 +86,45 @@ export function Editor() {
       <PanelResizeHandle className="bg-border hover:bg-accent w-1 transition-colors" />
       <Panel defaultSize={80}>
         <Puck
-          key={currentPageId} // Force re-render when page changes
-          config={config}
+          key={`${currentPageId}-v${puckVersion}`} // Re-mount when page changes or external name change forces version bump
+          config={editorConfig}
           data={currentPage.content}
           iframe={{ enabled: false }}
-          onPublish={(data) => {
+          overrides={{
+            headerActions: ({ children }) => (
+              <>
+                <PageSettingsButton />
+                {children}
+              </>
+            ),
+          }}
+          onChange={(data) => {
+            const newTitle = data.root?.title as string | undefined
+            const currentSlug = data.root?.slug as string | undefined
+            const previousTitle = currentPage.content.root?.title as string | undefined
+
+            // Auto-generate slug from title if:
+            // 1. Slug is empty/undefined, OR
+            // 2. Title changed and slug was auto-generated from previous title
+            const shouldAutoGenerateSlug =
+              !currentSlug || (previousTitle && currentSlug === generateSlug(previousTitle))
+
+            if (newTitle && shouldAutoGenerateSlug) {
+              data.root = {
+                ...data.root,
+                slug: generateSlug(newTitle),
+              }
+            }
+
+            // Update content immediately
             updatePageContent(currentPageId, data)
+
+            // Sync title from root to page name (debounced)
+            if (newTitle && newTitle.trim() && newTitle !== currentPage.name && debouncedRename) {
+              debouncedRename(currentPageId, newTitle.trim())
+            }
+          }}
+          onPublish={(data) => {
             console.log('Published data for page:', currentPage.name, data)
           }}
         />
