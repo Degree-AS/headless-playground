@@ -1,20 +1,23 @@
+import type { Page, PageData } from '@/components/editor/types'
+import { generateSlug } from '@/utils/slug'
+import type { Data } from '@measured/puck'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Data } from '@measured/puck'
-import type { Page, PageData } from '@/components/editor/types'
-import { generateSlug } from '@/utils'
 
 /**
  * Creates initial page data with empty content
  * All pages start empty - users add blocks as needed
+ * Uses new Puck format with root.props
  */
 const getInitialPageData = (name: string, slug?: string): PageData => ({
   content: [],
   root: {
-    title: name,
-    slug: slug ?? generateSlug(name),
-    metaDescription: '',
-    metaKeywords: '',
+    props: {
+      title: name,
+      slug: slug ?? generateSlug(name),
+      metaDescription: '',
+      metaKeywords: '',
+    },
   },
 })
 
@@ -160,9 +163,7 @@ export const useEditorStore = create<EditorStore>()(
 
         set((state) => ({
           pages: deleteFromTree(state.pages),
-          currentPageId: deletedIds.includes(state.currentPageId)
-            ? 'home'
-            : state.currentPageId,
+          currentPageId: deletedIds.includes(state.currentPageId) ? 'home' : state.currentPageId,
         }))
       },
 
@@ -170,16 +171,31 @@ export const useEditorStore = create<EditorStore>()(
         const renameInTree = (pageList: Page[]): Page[] => {
           return pageList.map((page) => {
             if (page.id === pageId) {
-              // Keep existing root data, only update title
+              // Generate new slug from new name
+              const newSlug = generateSlug(newName)
+
+              // Update title and slug in both old and new Puck format
+              const updatedRoot = page.content.root?.props
+                ? {
+                    ...page.content.root,
+                    props: {
+                      ...page.content.root.props,
+                      title: newName,
+                      slug: newSlug,
+                    },
+                  }
+                : {
+                    ...page.content.root,
+                    title: newName,
+                    slug: newSlug,
+                  }
+
               return {
                 ...page,
                 name: newName,
                 content: {
                   ...page.content,
-                  root: {
-                    ...page.content.root,
-                    title: newName,
-                  },
+                  root: updatedRoot,
                 },
               }
             }
@@ -192,14 +208,15 @@ export const useEditorStore = create<EditorStore>()(
 
         set((state) => ({
           pages: renameInTree(state.pages),
+          // Increment version to force Puck re-mount when renamed from PageTree
+          puckVersion: state.puckVersion + 1,
         }))
       },
 
       // UI actions
       setIsLoaded: (loaded) => set({ isLoaded: loaded }),
 
-      incrementPuckVersion: () =>
-        set((state) => ({ puckVersion: state.puckVersion + 1 })),
+      incrementPuckVersion: () => set((state) => ({ puckVersion: state.puckVersion + 1 })),
 
       resetPuckVersion: () => set({ puckVersion: 0 }),
 
@@ -232,6 +249,6 @@ export const useEditorStore = create<EditorStore>()(
         // Set isLoaded to true after hydration completes
         state?.setIsLoaded(true)
       },
-    }
-  )
+    },
+  ),
 )

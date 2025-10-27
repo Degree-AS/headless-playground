@@ -1,50 +1,12 @@
 'use client'
-import {
-  headingBlockConfig,
-  type HeadingBlockProps,
-} from '@/components/blocks/heading/heading-block'
-import { heroBlockConfig, type HeroBlockProps } from '@/components/blocks/hero/hero-block'
 import { useEditor } from '@/hooks'
-import { generateSlug } from '@/utils'
-import { Puck, type Config } from '@measured/puck'
+import { Puck } from '@measured/puck'
 import '@measured/puck/puck.css'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
+import { editorConfig } from './EditorConfig'
 import { PageSettingsButton } from './PageSettingsButton'
 import { PageTree } from './PageTree'
 import './styles.css'
-
-type EditorProps = {
-  HeadingBlock: HeadingBlockProps
-  HeroBlock: HeroBlockProps
-}
-
-const editorConfig: Config<EditorProps> = {
-  components: {
-    HeadingBlock: headingBlockConfig,
-    HeroBlock: heroBlockConfig,
-  },
-  root: {
-    fields: {
-      title: {
-        type: 'text',
-        label: 'Page Title',
-      },
-      slug: {
-        type: 'text',
-        label: 'URL Slug',
-      },
-      metaDescription: {
-        type: 'textarea',
-        label: 'Meta Description',
-      },
-      metaKeywords: {
-        type: 'text',
-        label: 'Meta Keywords (comma-separated)',
-      },
-    },
-    render: ({ children }) => children,
-  },
-}
 
 export function Editor() {
   const {
@@ -52,12 +14,13 @@ export function Editor() {
     currentPageId,
     currentPage,
     setCurrentPageId,
-    updatePageContent,
     addPage,
     deletePage,
     renamePage,
     puckVersion,
     isLoaded,
+    handlePuckChange,
+    handlePublish,
   } = useEditor()
 
   // Wait for Zustand persist hydration
@@ -96,35 +59,8 @@ export function Editor() {
               </>
             ),
           }}
-          onChange={(data) => {
-            const newTitle = data.root?.title as string | undefined
-            const currentSlug = data.root?.slug as string | undefined
-            const previousTitle = currentPage.content.root?.title as string | undefined
-
-            // Auto-generate slug from title if:
-            // 1. Slug is empty/undefined, OR
-            // 2. Title changed and slug was auto-generated from previous title
-            const shouldAutoGenerateSlug =
-              !currentSlug || (previousTitle && currentSlug === generateSlug(previousTitle))
-
-            if (newTitle && shouldAutoGenerateSlug) {
-              data.root = {
-                ...data.root,
-                slug: generateSlug(newTitle),
-              }
-            }
-
-            // Update content immediately
-            updatePageContent(currentPageId, data)
-
-            // Sync title to page name directly
-            if (newTitle && newTitle.trim() && newTitle !== currentPage.name) {
-              renamePage(currentPageId, newTitle.trim())
-            }
-          }}
-          onPublish={(data) => {
-            console.log('Published data for page:', currentPage.name, data)
-          }}
+          onChange={handlePuckChange}
+          onPublish={handlePublish}
         />
       </Panel>
     </PanelGroup>
