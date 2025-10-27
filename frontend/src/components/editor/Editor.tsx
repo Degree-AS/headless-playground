@@ -9,7 +9,6 @@ import { generateSlug } from '@/utils'
 import { Puck, type Config } from '@measured/puck'
 import '@measured/puck/puck.css'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
-import { EditorLoader } from './EditorLoader'
 import { PageSettingsButton } from './PageSettingsButton'
 import { PageTree } from './PageTree'
 import './styles.css'
@@ -57,14 +56,13 @@ export function Editor() {
     addPage,
     deletePage,
     renamePage,
-    isLoaded,
     puckVersion,
-    debouncedRename,
+    isLoaded,
   } = useEditor()
 
-  // Show loading state
+  // Wait for Zustand persist hydration
   if (!isLoaded) {
-    return <EditorLoader />
+    return <div className="p-4">Loading editor...</div>
   }
 
   if (!currentPage) {
@@ -119,9 +117,9 @@ export function Editor() {
             // Update content immediately
             updatePageContent(currentPageId, data)
 
-            // Sync title from root to page name (debounced)
-            if (newTitle && newTitle.trim() && newTitle !== currentPage.name && debouncedRename) {
-              debouncedRename(currentPageId, newTitle.trim())
+            // Sync title to page name directly
+            if (newTitle && newTitle.trim() && newTitle !== currentPage.name) {
+              renamePage(currentPageId, newTitle.trim())
             }
           }}
           onPublish={(data) => {

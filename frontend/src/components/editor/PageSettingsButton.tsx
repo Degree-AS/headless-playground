@@ -1,11 +1,16 @@
 'use client'
 
-import { usePuck } from '@measured/puck'
+import { createUsePuck } from '@measured/puck'
 import { Settings } from 'lucide-react'
 import { Button } from '@/components/ui'
 
+// Create typed usePuck hook
+const usePuckSelector = createUsePuck()
+
 export function PageSettingsButton() {
-  const { dispatch, appState } = usePuck()
+  // Use separate selectors for each value to avoid object reference issues
+  const dispatch = usePuckSelector((state) => state.dispatch)
+  const itemSelector = usePuckSelector((state) => state.appState.ui.itemSelector)
 
   const handleClick = () => {
     // Deselect current component to show page settings
@@ -17,7 +22,7 @@ export function PageSettingsButton() {
     })
   }
 
-  const isPageSettingsActive = !appState.ui.itemSelector
+  const isPageSettingsActive = !itemSelector
 
   return (
     <Button

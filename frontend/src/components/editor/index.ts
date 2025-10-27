@@ -1,6 +1,5 @@
 // Main component exports
 export { Editor } from './Editor'
-export { EditorLoader } from './EditorLoader'
 export { PageSettingsButton } from './PageSettingsButton'
 export { PageTree } from './PageTree'
 

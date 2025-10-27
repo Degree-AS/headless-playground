@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import debounce from 'lodash/debounce'
 import type { Data } from '@measured/puck'
 import type { Page, PageData } from '@/components/editor/types'
 import { generateSlug } from '@/utils'
@@ -41,8 +40,6 @@ interface EditorStore {
   // UI state
   isLoaded: boolean
   puckVersion: number
-  lastExternalName: string | null
-  debouncedRename: ReturnType<typeof debounce> | null
 
   // Page actions
   setCurrentPageId: (id: string) => void
@@ -54,11 +51,7 @@ interface EditorStore {
   // UI actions
   setIsLoaded: (loaded: boolean) => void
   incrementPuckVersion: () => void
-  updateLastExternalName: (name: string) => void
   resetPuckVersion: () => void
-  initializeDebouncedRename: (
-    renameFunction: (pageId: string, newName: string) => void
-  ) => void
 
   // Selectors
   getCurrentPage: () => Page | null
@@ -73,10 +66,8 @@ export const useEditorStore = create<EditorStore>()(
       currentPageId: 'home',
 
       // Initial UI state
-      isLoaded: false,
+      isLoaded: false, // Start as false, set to true after hydration
       puckVersion: 0,
-      lastExternalName: null,
-      debouncedRename: null,
 
       // Page actions
       setCurrentPageId: (id) => set({ currentPageId: id }),
@@ -210,22 +201,7 @@ export const useEditorStore = create<EditorStore>()(
       incrementPuckVersion: () =>
         set((state) => ({ puckVersion: state.puckVersion + 1 })),
 
-      updateLastExternalName: (name) => set({ lastExternalName: name }),
-
       resetPuckVersion: () => set({ puckVersion: 0 }),
-
-      initializeDebouncedRename: (renameFunction) => {
-        const existing = get().debouncedRename
-        if (existing) {
-          existing.cancel()
-        }
-
-        const debouncedFn = debounce((pageId: string, newName: string) => {
-          renameFunction(pageId, newName)
-        }, 300)
-
-        set({ debouncedRename: debouncedFn })
-      },
 
       // Selectors
       findPage: (pageId, pageList) => {
@@ -252,17 +228,10 @@ export const useEditorStore = create<EditorStore>()(
         pages: state.pages,
         currentPageId: state.currentPageId,
       }),
+      onRehydrateStorage: () => (state) => {
+        // Set isLoaded to true after hydration completes
+        state?.setIsLoaded(true)
+      },
     }
   )
 )
-
-/**
- * Cleanup function to call on component unmount
- * Cancels any pending debounced rename operations
- */
-export const cleanupEditor = () => {
-  const { debouncedRename } = useEditorStore.getState()
-  if (debouncedRename) {
-    debouncedRename.cancel()
-  }
-}
