@@ -51,3 +51,42 @@ storybook-static
 
 # claude ai configuration (project-local)
 .claude
+
+# DynamicWeb / .NET
+# Build artifacts
+**/bin/
+**/obj/
+
+# DynamicWeb runtime files
+backend/DynamicwebProject/wwwroot/
+
+# .NET binaries and cache
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+
+# IDE files
+*.pidb
+*.booproj
+*.svd
+*.sdf
+*.opensdf
+*.DotSettings.user
+*.ncrunch*
+_NCrunch_*
+*.GhostDoc.xml
+*.dotCover
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

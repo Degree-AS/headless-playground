@@ -1,6 +1,8 @@
 import { requireAdmin } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { AdminHeader } from '@/components/admin/header'
+import { AdminFooter } from '@/components/admin/footer'
+import { AdminContentWrapper } from '@/components/admin/content-wrapper'
 
 export default async function AdminLayout({
   children,
@@ -14,34 +16,12 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <header className="border-b">
-        <div className="container flex h-16 items-center gap-8 px-4">
-          <Link href="/admin" className="text-lg font-semibold">
-            Admin Panel
-          </Link>
-          <nav className="flex gap-6">
-            <Link
-              href="/admin"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/admin/editor"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Page Editor
-            </Link>
-          </nav>
-          <div className="ml-auto">
-            <Link href="/" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-              ← Back to Site
-            </Link>
-          </div>
-        </div>
-      </header>
-      <main className="flex-1">{children}</main>
+    <div className="fixed inset-0 flex flex-col">
+      <AdminHeader />
+      <main className="flex-1 overflow-auto">
+        <AdminContentWrapper>{children}</AdminContentWrapper>
+      </main>
+      <AdminFooter />
     </div>
   )
 }
